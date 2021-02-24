@@ -1,0 +1,192 @@
+数据库概述：
+    关系结构模型数据库，即表与表之间的关系。
+    数据库是面向关系的
+
+常见数据库：
+Oracle:甲骨文（市场占有率最高）
+DB2:IBM;
+SQL Server:微软；
+Sybase: 赛尔斯；
+MYSQL： 甲骨文；
+
+RDBMS： Relational Databse management system 关系型数据库管理系统
+
+数据库有时是管理系统，有时是仓库
+
+manager+DB1+DB2---->RDBMS：
+
+学习如何与管理员联系
+
+Databse中有很多tables.
+
+
+数据库表有两个层面，一个是表的结构，另一个是表的记录。
+
+表的结构：
+
+s_id        varchar(10)
+s_name      varchar(20)
+s-age       int
+s-sex       varchar(10)
+
+表记录：
+s_id    s_name      s_age       s_sex
+12      YYYY        23          F
+
+Tips:
+先有表结构后有表记录
+
+
+总结：
+    RDBMS：管理员+仓库
+    Database： N个tables
+    table:
+        表的结构：定义表的列名和列类型
+        表记录：一行一行的记录
+
+
+Chapater 2: JAVA应用于数据库的关系
+
+    安装mySQL:
+    tips：安装包的所在路劲不要包含中文
+    安装配置中，选择精细配置，
+    选择开发者电脑，----性能会降低，但是使用
+    因为选择MYSQL服务器电脑的话，MYSQL会尽可能的占用电脑内存。
+    选择server mechine的话，内存使用会很大
+
+    选择multifunctional database:多用途数据库
+        事务数据库 ---不选
+        非事务数据库 ---不选
+
+    最后一项，选择连接个
+    数，
+    decision support(DSS)/OLAP  //并发连接数上限20
+    online transaction processing(OLTP)  //并发连接数上限500
+    Manual setting //自己选，选择这个，自定义15-20个。
+
+    最大并发数：什么是并发？多线程同时访问。
+
+    Enable TCP/IP 端口：3306
+    启动严格语法模式
+
+
+    选择编码：选择自定义编码：utf-8 在MYSQL中是utf8 //如果选错容易乱码
+
+    如果安装成功，在PC-管理中，选择System and application-->选择services-->查看是否有MYSQL，可以通过这里运行或者停止MYSQL 服务器
+    
+    登录MYSQL服务器：
+    1. 打开command prompt
+    2.输入命令行： mysql -uroot(root是用户名) -p1234(1234是密码)
+    exit退出
+
+Chapater4 删除MYSQL
+    1.停止MYSQL  --->用命令行停止： net stop MYSQL，也可以用net start MYSQL运动MYSQL
+                 --->或者在电脑--管理中用鼠标停止
+    2. 添加删除程序，在控制台选择程序和功能，寻找mysql，然后卸载
+    3. 删除两条目录：
+            a. C:\Documents and Setting/All Users \Application Data\MYSQL //即安装路劲的目录
+            b. c:\ProgramData\MYSQL //这个必然是这样的
+    4.查看注册表：(regedit)
+        HKEY-LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services
+        HKEY-LOCAL_MACHINE\SYSTEM\ControlSet001\Services
+        HKEY-LOCAL_MACHINE\SYSTEM\ControlSet002\Services
+        搜索mysql，找到一律删掉。
+    5.重启电脑。
+
+
+Chapater 5 MYSQL 安装路径以及配置信息。
+    在安装的目录中，有一个 Mysqld.exe，在进程中查找，看到的话说明MYSQL正常启动。
+    Mysqld.exe，是MYSQL的服务端程序，如果不开启，客户端连接不上
+    mysql.exe： 客户端程序，用于连接服务端程序。
+    在客户端用
+    mysql -uroot -p123 //用这个命令连接服务端。
+    客户端程序可有多个，服务端只有一个
+    在program data中MYSQL 的data目录 .frm的文件都对应一个表格。
+
+
+Chapater 6 开启关闭服务器以及登录退出客户端。
+    net start/stop MYSQL //开启/关闭服务器
+    登录退出客户端：
+    Mysql
+    -u  //跟username
+    -p  //跟password
+    -h  //指定在哪个IP登录，跟哪个ip地址。root用户任意，但指定用户锁死
+    exit/quit //退出
+
+Chapater 7 SQL语言概述
+    定义：SQL： Structured Query Language 结构化查询语言（很多数据库都有）
+    作用：客户端使用SQL操作服务器。向服务器下达命名
+    --->启动mysql.exe，连接服务器后，就可以使用sql来操作服务器了。
+    --->将来会使用JAVA程序连接服务器，然后使用sql来操作服务器。
+
+    SQL标准（SQL99）
+    -->由国际标准化组织（ISO）指定的，对DBMS的统一操作方式（例如相同的语句可以操作：mysql,oracle等）
+    SQL方言
+    --->某种DBMS不只会支持SQL标准，而且还会有一些自己独有的语法，这就称之为方言！；例如limit语句只在MySQL中可以使用。
+     
+     SQL语法：
+        1.SQL语句可以在单行或多行书写，以分号结尾
+        2.可以使用空格和缩进来增强语句的可读性
+        3.MySQL不区分大小写，建议关键字使用大写 
+
+    SQL语句分类（*****）
+        1.DDL(Data Definition Language):数据库定义语言：用来定义数据库对象：库、表、列等：
+            -->创建、删除、修改、库、表结构
+        2.DML（Data Manipulation Language）:数据库操作语言：用来定义数据库记录（数据）：
+            -->增、删、改：表记录
+        3.DCL（Data control language）:数据库控制语言：用来定义访问权限和安全级别：
+        4.DQL （Data qurey Language）:数据库查询语言：用来查询记录（数据）；//不是标准，是分出来的
+
+        ddl:数据库或表的结构操作（****）重点
+        dml:对表的记录进行更新（增、删、改）（****）重点
+        dql：对表的记录的查询（****，难点）重点和难点
+        dcl：对用户的创建及授权。
+    
+Chapater 8 DDL(数据库定义语言)操作数据库。
+    DDL：
+
+    1.数据库
+    * 查看所有数据库：SHOW DATABASES; //注意，结束要分号，大写，databases是复数。
+    * 切换（选择要操作的）数据库： USE 数据库名； //没选数据库时，不能查到表
+    * 创建数据库： CREATE DATABASE [IF NOT EXISTS]  mydb1 [CHARSET=utf8]  //[]中的内容是可选择内容，使用时不要叫[]。
+    * 删除数据库： DROP DATABASE [IF EXISTS] mydb1;
+    * 修改数据库编码： ALTER DATABASE mydb1 CHARACTER SET uft8; //用的比较少，不用特别记。
+
+Chapater 9 数据库类型介绍1
+    数据类型（列类型）：
+    int:整数
+    double:浮点型，例如 double(5,2)表示最多5位，其中必须有2位小数，即最大值为999.99：
+    decimal:浮点型，在表单前方面使用该类型，因为不会出现精度缺失问题；//用在钱方面比较好
+    char: 固定长度字符串类型： char(255) 最大255 数据的长度不足指定长度，补足到指定长度。可用于一些固定长度的数据：身份证号、时间等
+    varchar:可变长度字符串类型：varchar(65535),zhangSan 需要单独拿出一个字节专门记录数据长度。
+    text(clob //标准里是这个):字符串类型： //这个是MYSQL的独有数据类型
+        -->很小 tinytext    2 8次方-1
+        -->小   text        2 16-1
+        -->中   mediumtext  2 24次方-1
+        -->大   longtext    2 32次方-1
+    blob:字节类型 //二进制 text是字符  //比如把一个电影存进一个数据库，
+         -->很小 
+        -->小   
+        -->中   
+        -->大
+     date:日期类型，格式为：yyyy-mm-dd;
+     time:时间类型，格式为：hh:mm:ss
+     timestap:时间戳类型：有日期和分秒
+       
+
+    
+
+
+
+
+
+
+        
+
+
+
+
+
+    
+
+
